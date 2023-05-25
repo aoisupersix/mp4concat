@@ -42,7 +42,7 @@ func basePath() string {
 		log.Print("Home directory not found")
 		log.Fatal(err)
 	}
-	dir := fmt.Sprintf("%s/Desktop/mp4concat_work", home)
+	dir := filepath.Join(home, "Desktop", "mp4concat_work")
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		os.Mkdir(dir, 0755)
 	}
@@ -160,7 +160,7 @@ func main() {
 
 	// Create input file
 	mp4concatBasePath := basePath()
-	inputFileName := fmt.Sprintf("%s/%s.txt", mp4concatBasePath, uuid.New().String())
+	inputFileName := filepath.Join(mp4concatBasePath, fmt.Sprintf("%s.txt", uuid.New().String()))
 	createInputFile(filesMP4, inputFileName)
 
 	// Build arguments for the ffmpeg command
