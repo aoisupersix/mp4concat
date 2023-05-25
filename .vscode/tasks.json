@@ -1,0 +1,65 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "go",
+      "label": "go: build package for windows/386",
+      "command": "build",
+      "problemMatcher": [
+        "$go"
+      ],
+      "group": "build",
+      "detail": "go build",
+      "options": {
+        "env": {
+          "GOOS": "windows",
+          "GOARCH": "386"
+        }
+      },
+      "presentation": {
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "type": "go",
+      "label": "go: build package for linux/386",
+      "command": "build",
+      "problemMatcher": [
+        "$go"
+      ],
+      "group": "build",
+      "detail": "go build",
+      "options": {
+        "env": {
+          "GOOS": "linux",
+          "GOARCH": "386"
+        }
+      },
+      "presentation": {
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "type": "go",
+      "label": "go: build package for macOSX",
+      "command": "build",
+      "problemMatcher": [
+        "$go"
+      ],
+      "group": "build",
+      "detail": "go build",
+      "options": {
+        "env": {
+          "GOOS": "darwin",
+          "GOARCH": "amd64"
+        }
+      },
+      "presentation": {
+        "panel": "shared",
+        "clear": true
+      }
+    }
+  ]
+}
