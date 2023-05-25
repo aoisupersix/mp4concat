@@ -1,0 +1,78 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.15'
+
+      - name: Install dependencies
+        run: go get .
+
+      - name: Build for windows/386
+        run: go build -o mp4concat-windows386.exe .
+        env:
+          GOOS: windows
+          GOARCH: 386
+
+      - name: Build for linux/386
+        run: go build -o mp4concat-linux386 .
+        env:
+          GOOS: linux
+          GOARCH: 386
+
+      - name: Build for macOSX
+        run: go build -o mp4concat-macosx .
+        env:
+          GOOS: darwin
+          GOARCH: amd64
+
+      - name: "Build changelog"
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v3.4.0
+        with:
+          configurationJson: |
+            {
+              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+              "categories": [
+                {
+                    "title": "## ✨ New features",
+                    "labels": ["newfeatures"]
+                },
+                {
+                    "title": "## 🩹 Improvements & Bug fixes",
+                    "labels": ["improvement", "bug"]
+                },
+                {
+                    "title": "## 📦 Others",
+                    "labels": ["documentation", "dependencies"]
+                }
+              ]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.build_changelog.outputs.changelog }}
+          files: |
+            mp4concat-windows386.exe
+            mp4concat-linux386
+            mp4concat-macosx
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
