@@ -35,20 +35,6 @@ func splitFilePathBySpace(str string) []string {
 	return result
 }
 
-func basePath() string {
-	// mp4concat uses ~/Desktop/mp4concat , HARD CODED for now.
-	home, err := os.UserHomeDir()
-	if err != nil {
-		log.Print("Home directory not found")
-		log.Fatal(err)
-	}
-	dir := filepath.Join(home, "Desktop", "mp4concat_work")
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		os.Mkdir(dir, 0755)
-	}
-	return dir
-}
-
 func extractMP4Path(files []string) []string {
 	result := make([]string, 0, len(files))
 	for _, v := range files {
@@ -156,15 +142,16 @@ func main() {
 	}
 
 	// Create input file
-	mp4concatBasePath := basePath()
 	inputFileName := filepath.Join(os.TempDir(), fmt.Sprintf("%s.txt", uuid.New().String()))
 	createInputFile(filesMP4, inputFileName)
 
 	// Build arguments for the ffmpeg command
 	now := time.Now()
+	// output directory uses the first input file directory
+	outputDir := filepath.Dir(filesMP4[0])
 	outputFileName := fmt.Sprintf(
 		"%s/output_%04d%02d%02d_%02d%02d%02d.mp4",
-		mp4concatBasePath,
+		outputDir,
 		now.Year(),
 		now.Month(),
 		now.Day(),
