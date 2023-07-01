@@ -127,10 +127,7 @@ func createInputFile(filesMP4 []string, inputFileNameAbsolute string) {
 	}
 	for _, v := range filesMP4 {
 		_, err := f.WriteString(
-			fmt.Sprintf(
-				"file %s\n",
-				strings.Replace(v, " ", "\\ ", -1),
-			),
+			fmt.Sprintf("file '%s'\n", v),
 		)
 		if err != nil {
 			log.Fatal(err)
