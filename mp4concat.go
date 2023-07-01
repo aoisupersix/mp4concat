@@ -157,7 +157,7 @@ func main() {
 
 	// Create input file
 	mp4concatBasePath := basePath()
-	inputFileName := filepath.Join(mp4concatBasePath, fmt.Sprintf("%s.txt", uuid.New().String()))
+	inputFileName := filepath.Join(os.TempDir(), fmt.Sprintf("%s.txt", uuid.New().String()))
 	createInputFile(filesMP4, inputFileName)
 
 	// Build arguments for the ffmpeg command
